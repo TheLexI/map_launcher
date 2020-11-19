@@ -1,9 +1,9 @@
 import 'dart:io';
 
-import 'package:encrypt/encrypt.dart';
-import 'package:encrypt/encrypt_io.dart';
+//import 'package:encrypt/encrypt.dart';
+//import 'package:encrypt/encrypt_io.dart';
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
+//import 'package:path_provider/path_provider.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
 import 'models.dart';
@@ -30,14 +30,14 @@ Future<String> getYaNavDirectionsUrl(
     },
   );
 
-  var path = '${(await getApplicationDocumentsDirectory()).path}/yanavi.pem';
+  var path = '' ;// '${(await getApplicationDocumentsDirectory()).path}/yanavi.pem';
   var file = await File(path);
   await file.writeAsString(await rootBundle.loadString(privateKey));
 
-  final privateKey_ = await parseKeyFromFile(path);
-  final signer = Signer(RSASigner(RSASignDigest.SHA256, privateKey: privateKey_));
-  final signature = Uri.encodeFull(signer.sign(url).base64);
-
+  //final privateKey_ = await parseKeyFromFile(path);
+  //final signer = Signer(RSASigner(RSASignDigest.SHA256, privateKey: privateKey_));
+  //final signature = Uri.encodeFull(signer.sign(url).base64);
+  var signature = '';
   print(signature);
 
   url = Uri.encodeFull(url) + '&signature=${Uri.encodeComponent(signature)}';

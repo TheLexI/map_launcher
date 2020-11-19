@@ -8,8 +8,8 @@ environment:
   flutter: ">=1.10.0"
 
 dependencies:
-  encrypt: any
-  path_provider: any
+  ## encrypt: any
+  ## path_provider: any
   flutter:
     sdk: flutter
 
