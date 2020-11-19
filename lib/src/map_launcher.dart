@@ -7,6 +7,7 @@ import 'package:map_launcher/src/directions_url.dart';
 import 'package:map_launcher/src/marker_url.dart';
 import 'package:map_launcher/src/models.dart';
 import 'package:map_launcher/src/utils.dart';
+import 'package:map_launcher/src/yandex_url.dart';
 
 class MapLauncher {
   static const MethodChannel _channel = const MethodChannel('map_launcher');
@@ -59,28 +60,45 @@ class MapLauncher {
     return _channel.invokeMethod('showMarker', args);
   }
 
-  static Future<dynamic> showDirections({
-    @required MapType mapType,
-    @required Coords destination,
-    String destinationTitle,
-    Coords origin,
-    String originTitle,
-    List<Coords> waypoints,
-    DirectionsMode directionsMode = DirectionsMode.driving,
-  }) async {
-    final url = getMapDirectionsUrl(
-      mapType: mapType,
-      destination: destination,
-      destinationTitle: destinationTitle,
-      origin: origin,
-      originTitle: originTitle,
-      waypoints: waypoints,
-      directionsMode: directionsMode,
-    );
+  static Future<dynamic> showDirections(
+      {@required MapType mapType,
+      @required Coords destination,
+      String destinationTitle,
+      Coords origin,
+      String originTitle,
+      List<Coords> waypoints,
+      DirectionsMode directionsMode = DirectionsMode.driving,
+      String privateKey,
+      String clientId}) async {
+    String url;
+
+    if (MapType.yandexNavi == mapType) {
+      url = await getYaNavDirectionsUrl(
+          mapType: mapType,
+          destination: destination,
+          destinationTitle: destinationTitle,
+          origin: origin,
+          originTitle: originTitle,
+          waypoints: waypoints,
+          directionsMode: directionsMode,
+          client: clientId,
+          privateKey: privateKey);
+    } else {
+
+      url = Uri.encodeFull(getMapDirectionsUrl(
+        mapType: mapType,
+        destination: destination,
+        destinationTitle: destinationTitle,
+        origin: origin,
+        originTitle: originTitle,
+        waypoints: waypoints,
+        directionsMode: directionsMode,
+      ));
+    }
 
     final Map<String, String> args = {
       'mapType': Utils.enumToString(mapType),
-      'url': Uri.encodeFull(url),
+      'url': url,
       'destinationTitle': destinationTitle,
       'destinationLatitude': destination.latitude.toString(),
       'destinationLongitude': destination.longitude.toString(),
